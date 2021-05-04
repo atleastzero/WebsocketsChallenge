@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  io.emit('chat message', "User " + socket.id + " has connected.")
 
   users_nicks[socket.id] = socket.id;
 
