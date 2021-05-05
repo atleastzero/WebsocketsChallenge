@@ -42,6 +42,14 @@ io.on('connection', (socket) => {
     io.emit('chat message', usersNicks[socket.id] + ": " + msg);
   });
 
+  socket.on('is typing', () => {
+    io.emit('is typing', usersNicks[socket.id] + " is typing");
+  });
+
+  socket.on('is not typing', () => {
+    io.emit('is not typing');
+  });
+
   socket.on('disconnect', () => {
     io.emit('chat message', "User " + usersNicks[socket.id] + " has disconnected.");
     online = online.filter(function(value, index, arr){

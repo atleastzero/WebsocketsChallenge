@@ -22,6 +22,7 @@
     </form>
     <ul id="online-users"></ul>
     <ul id="messages"></ul>
+    <p id="is-typing"></p>
     <form id="message-form" action="">
       <input id="input" autocomplete="off" /><button type="submit">Send</button>
     </form>
@@ -35,6 +36,7 @@
       var messageForm = document.getElementById('message-form');
       var nameInput = document.getElementById('name');
       var input = document.getElementById('input');
+      var isTyping = document.getElementById('is-typing');
 
       nameForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -68,6 +70,22 @@
           activeUser.textContent = onlineUsers[onlineUser];
           online.appendChild(activeUser);
         }
+      });
+
+      socket.on('is typing', function(msg) {
+        isTyping.innerText = msg;
+      });
+
+      socket.on('is not typing', function() {
+        isTyping.innerText = '';
+      });
+
+      input.addEventListener('keydown', function(e) {
+        socket.emit('is typing');
+      });
+
+      input.addEventListener('keyup', function(e) {
+        socket.emit('is not typing');
       });
     </script>
   </body>
