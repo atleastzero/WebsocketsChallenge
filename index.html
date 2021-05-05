@@ -20,6 +20,7 @@
       <label for="name">Name</label>
       <input name="name" id="name" autocomplete="off" /><button type="submit">Update</button>
     </form>
+    <ul id="online-users"></ul>
     <ul id="messages"></ul>
     <form id="message-form" action="">
       <input id="input" autocomplete="off" /><button type="submit">Send</button>
@@ -28,6 +29,7 @@
     <script>
       var socket = io();
 
+      var online = document.getElementById('online-users');
       var messages = document.getElementById('messages');
       var nameForm = document.getElementById('name-form');
       var messageForm = document.getElementById('message-form');
@@ -55,7 +57,18 @@
         item.textContent = msg;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
-      })
+      });
+
+      socket.on('check online', function(onlineUsers) {
+        while (online.firstChild) {
+          online.removeChild(online.firstChild);
+        }
+        for (let onlineUser in onlineUsers) {
+          var activeUser = document.createElement('li');
+          activeUser.textContent = onlineUsers[onlineUser];
+          online.appendChild(activeUser);
+        }
+      });
     </script>
   </body>
 </html>
